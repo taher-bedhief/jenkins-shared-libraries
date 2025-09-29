@@ -6,7 +6,7 @@
 def call(Map config = [:]) {
     def imageTag = config.imageTag ?: error("Image tag is required")
     def manifestsPath = config.manifestsPath ?: 'kubernetes'
-    def gitCredentials = config.gitCredentials ?: 'github-credentials'
+    def gitCredentials = config.gitCredentials ?: 'crd_github'
     def gitUserName = config.gitUserName ?: 'Jenkins CI'
     def gitUserEmail = config.gitUserEmail ?: 'jenkins@example.com'
     
@@ -25,12 +25,12 @@ def call(Map config = [:]) {
         
         // Update deployment manifests with new image tags - using proper Linux sed syntax
         sh """
-            # Update main application deployment - note the correct image name is laxg66/easyshop-app
-            sed -i "s|image: laxg66/easyshop-app:.*|image: laxg66/easyshop-app:${imageTag}|g" ${manifestsPath}/08-easyshop-deployment.yaml
-            
+            # Update main application deployment - note the correct image name is taher2bedhief/echry-app
+            sed -i "s|image: taher2bedhief/echry-app:.*|image: taher2bedhief/echry-app:${imageTag}|g" ${manifestsPath}/08-easyshop-deployment.yaml
+    
             # Update migration job if it exists
             if [ -f "${manifestsPath}/12-migration-job.yaml" ]; then
-                sed -i "s|image: laxg66/easyshop-migration:.*|image: laxg66/easyshop-migration:${imageTag}|g" ${manifestsPath}/12-migration-job.yaml
+                sed -i "s|image: taher2bedhief/echry-migration:.*|image: taher2bedhief/echry-migration:${imageTag}|g" ${manifestsPath}/12-migration-job.yaml
             fi
             
             # Ensure ingress is using the correct domain
@@ -47,7 +47,7 @@ def call(Map config = [:]) {
                 git commit -m "Update image tags to ${imageTag} and ensure correct domain [ci skip]"
                 
                 # Set up credentials for push
-                git remote set-url origin https://\${GIT_USERNAME}:\${GIT_PASSWORD}@github.com/lax66/tws-e-commerce-app_hackathon.git
+                git remote set-url origin https://\${GIT_USERNAME}:\${GIT_PASSWORD}@github.com/taher-bedhief/ech-ry-site.git
                 git push origin HEAD:\${GIT_BRANCH}
             fi
         """

@@ -35,7 +35,7 @@ def call(Map config = [:]) {
             
             # Ensure ingress is using the correct domain
             if [ -f "${manifestsPath}/10-ingress.yaml" ]; then
-                sed -i "s|host: .*|host: ech-ry.com|g" ${manifestsPath}/10-ingress.yaml
+                sed -i "s|host: .*|host: www.ech-ry.com|g" ${manifestsPath}/10-ingress.yaml
             fi
             
             # Check for changes
